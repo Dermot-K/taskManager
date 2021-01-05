@@ -3,6 +3,7 @@ from flask import (
     Flask, flash, render_template, redirect, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
 
@@ -25,6 +26,12 @@ def get_tasks():
     # declare var to hold data from our mongo.db tasks collection
     mongo_tasks = mongo.db.tasks.find()
     return render_template("tasks.html", tasks=mongo_tasks)
+
+
+@app.route("/register")
+def register():
+    # render register.html
+    return render_template("register.html")
 
 
 # tell application how and where to run
