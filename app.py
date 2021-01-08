@@ -24,8 +24,8 @@ mongo = PyMongo(app)
 @app.route("/get_tasks")
 def get_tasks():
     # declare var to hold data from our mongo.db tasks collection
-    mongo_tasks = mongo.db.tasks.find()
-    return render_template("tasks.html", tasks=mongo_tasks)
+    tasks = list(mongo.db.tasks.find())
+    return render_template("tasks.html", tasks=tasks)
 
 
 @app.route("/register", methods=["GET", "POST"])

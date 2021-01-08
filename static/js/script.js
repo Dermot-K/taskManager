@@ -1,8 +1,11 @@
-$(document).ready(function(){
-    $(".sidenav").sidenav({edge: "right"});
-  });
+$(document).ready(function () {
+    // sidenav
+    $(".sidenav").sidenav({ edge: "right" });
 
-// initialise collapsible accordion
-  $(document).ready(function(){
+    // accordion
     $('.collapsible').collapsible();
-  });
+
+    // tooltip
+    $('.tooltipped').tooltip();
+});
+
