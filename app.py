@@ -105,6 +105,7 @@ def logout():
     session.pop("user")
     return redirect(url_for("login"))
 
+
 # tell application how and where to run
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
