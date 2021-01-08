@@ -7,5 +7,15 @@ $(document).ready(function () {
 
     // tooltip
     $('.tooltipped').tooltip();
+
+    // date picker
+    $('.datepicker').datepicker({
+        format: "dd mmm, yyyy",
+        yearRange: 3,
+        showClearBtn: true,
+        i18n: {
+            done: "Select"
+        }
+    });
 });
 
