@@ -108,8 +108,11 @@ def logout():
 
 # START of CRUD FUNCTIONALITY
 # add task
-@app.route("/add_task")
+@app.route("/add_task", methods=["GET", "POST"])
 def add_task():
+    if request.method == "POST":
+        mongo.db.task.insert_one(
+            request.form.to_dict())
     # connect data from Mongo DB categories collection
     # to dynamically generate options
     categories = mongo.db.categories.find().sort(
