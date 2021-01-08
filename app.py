@@ -110,7 +110,11 @@ def logout():
 # add task
 @app.route("/add_task")
 def add_task():
-    return render_template("add_task.html")
+    # connect data from Mongo DB categories collection
+    # to dynamically generate options
+    categories = mongo.db.categories.find().sort(
+        "category_name", 1)
+    return render_template("add_task.html", categories=categories)
 
 
 # tell application how and where to run
