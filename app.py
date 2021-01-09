@@ -107,12 +107,24 @@ def logout():
 
 
 # START of CRUD FUNCTIONALITY
-# add task
+
 @app.route("/add_task", methods=["GET", "POST"])
 def add_task():
     if request.method == "POST":
-        mongo.db.task.insert_one(
-            request.form.to_dict())
+        # insert our form into the mongo db
+        is_urgent = "on" if request.form.get("is_urgent") else "off"
+        task = {
+            "category": request.form.get("category_name"),
+            "task_name": request.form.get("task_name"),
+            "task_description": request.form.get("task_description"),
+            "is_urgent": is_urgent,
+            "due_date": request.form.get("due_date"),
+            "created_by": session["user"]
+        }
+        mongo.db.tasks.insert_one(task)
+        flash("Task succesfully added")
+        return redirect(url_for("get_tasks"))
+
     # connect data from Mongo DB categories collection
     # to dynamically generate options
     categories = mongo.db.categories.find().sort(
