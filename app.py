@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
 
+# bson.object ObejectId - render MongoDB docs by unique id
 
 # create an instance of Flask (stored in variable named "app")
 app = Flask(__name__)
@@ -130,6 +131,18 @@ def add_task():
     categories = mongo.db.categories.find().sort(
         "category_name", 1)
     return render_template("add_task.html", categories=categories)
+
+
+# edit tasks
+@app.route("/edit_task/<task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    # ObjectID function returns db record of task_id which gets passed to it
+    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+
+    # grab data from Mongo DB categories collection to generate options
+    categories = mongo.db.categories.find().sort(
+        "category_name", 1)
+    return render_template("edit_task.html", task=task, categories=categories)
 
 
 # tell application how and where to run
