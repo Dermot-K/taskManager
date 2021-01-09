@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
 
-# bson.object ObejectId - render MongoDB docs by unique id
+# bson.object ObjectId - render MongoDB docs by unique id
 
 # create an instance of Flask (stored in variable named "app")
 app = Flask(__name__)
@@ -158,6 +158,13 @@ def edit_task(task_id):
         "category_name", 1)
     return render_template("edit_task.html", task=task, categories=categories)
 
+
+# delete tasks
+@app.route("/delete_task/<task_id>")
+def delete_task(task_id):
+    mongo.db.tasks.remove({"_id": ObjectId(task_id)})
+    flash("Task Successfully Deleted")
+    return redirect(url_for("get_tasks"))
 
 # tell application how and where to run
 if __name__ == "__main__":
