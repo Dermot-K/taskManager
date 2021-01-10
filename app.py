@@ -9,7 +9,7 @@ if os.path.exists("env.py"):
 
 # bson.object ObjectId - render MongoDB docs by unique id
 
-# create an instance of Flask (stored in variable named "app")
+# create an instance of Flask (bind to variable named "app")
 app = Flask(__name__)
 
 # app configurations
@@ -26,6 +26,15 @@ mongo = PyMongo(app)
 def get_tasks():
     # declare var to hold data from our mongo.db tasks collection
     tasks = list(mongo.db.tasks.find())
+    return render_template("tasks.html", tasks=tasks)
+
+
+# search functionality
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    # $search on any $text index within tasks for the query variable
+    tasks = list(mongo.db.tasks.find({"$text": {"$search": query}}))
     return render_template("tasks.html", tasks=tasks)
 
 
@@ -204,6 +213,14 @@ def edit_category(category_id):
     # store it in category variable
     category = mongo.db.categories.find_one({"_id": ObjectId(category_id)})
     return render_template("edit_category.html", category=category)
+
+
+# delete category
+@app.route("/delete_category/<category_id>")
+def delete_category(category_id):
+    mongo.db.categories.remove({"_id": ObjectId(category_id)})
+    flash("Category Successfully Deleted")
+    return redirect(url_for("get_categories"))
 
 
 # tell application how and where to run
