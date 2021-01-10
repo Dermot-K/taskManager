@@ -188,6 +188,24 @@ def add_category():
     return render_template("add_category.html")
 
 
+# edit category
+@app.route("/edit_catgeory/<category_id>", methods=["GET", "POST"])
+def edit_category(category_id):
+    if request.method == "POST":
+        submit = {
+            "category_name": request.form.get("category_name")
+        }
+        # param 1 = id of category to be looked up and edited
+        # param 2 = updated category input by the user
+        mongo.db.categories.update({"_id": ObjectId(category_id)}, submit)
+        flash("Category successfully updated")
+        return redirect(url_for("get_categories"))
+    # return Mongo db BSON object for category_id passed from Jinja
+    # store it in category variable
+    category = mongo.db.categories.find_one({"_id": ObjectId(category_id)})
+    return render_template("edit_category.html", category=category)
+
+
 # tell application how and where to run
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
